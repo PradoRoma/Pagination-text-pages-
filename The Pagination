@@ -1,0 +1,77 @@
+class Pagination:
+
+    def __init__(self, items = [], page_size = 10):
+        self.items = items
+        self.page_size = page_size
+        self.total_pages = 1 if not self.items else ((len(self.items) // self.page_size) + 1)
+        self.current_page = 1
+
+    def get_items(self):  
+        return self.items
+
+    def get_page_size(self):
+        return self.page_size
+
+    def get_current_page(self):
+        return  self.current_page
+
+    def prev_page(self):           #Данная функция  позволяет вернутся на пердыдущую страницу, при условии, что бы не находимся на первой странице
+        if self.current_page == 1:
+            return self
+        self.current_page -= 1
+        return self
+
+    def next_page(self):         #Данная функция позволяет перейти на следующую страницу, при условии, что мы не на последней
+        if self.current_page == self.total_pages:
+            return self
+        self.current_page += 1
+
+    def first_page(self):   #Данная функция возвращает нас на первую страницу
+        self.current_page = 1
+        return  self
+
+    def last_page(self):   #Данная функция открывает последнюю страницу с текстом.
+        self.current_page = self.total_pages
+        return self
+
+    def go_to_page(self,page):   #Данная функция позволяет нам указать нужную нам страницу, затем открывает эту страницу и мы можем видеть интересующий нам текст
+        if page < 1:
+            page = 1
+        elif page > self.total_pages:
+            page = self.total_pages
+
+        self.current_page = page
+        return self
+
+    def get_visible_items(self):      #С помощью этой функци мы можем читать текст на странице.
+        start = (self.current_page  - 1) * self.page_size
+        end = start + self.page_size
+        return  self.items[start:end]
+
+
+
+alphabet = list("abcdefghijklmnopqrstuvwxyz")
+p = Pagination(alphabet, 4)
+print(p.get_visible_items())
+p.next_page()
+print(p.get_visible_items())
+p.next_page()
+print(p.get_visible_items())
+p.prev_page()
+print(p.get_visible_items())
+p.first_page()
+print(p.get_visible_items())
+p.last_page()
+print(p.get_visible_items())
+p.go_to_page(4)
+print(p.get_visible_items())
+
+
+#Ответы:
+#['a', 'b', 'c', 'd']
+#['e', 'f', 'g', 'h']
+#['i', 'j', 'k', 'l']
+#['e', 'f', 'g', 'h']
+#['a', 'b', 'c', 'd']
+#['y', 'z']
+#['m', 'n', 'o', 'p']
